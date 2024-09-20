@@ -2,21 +2,28 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Menu from './Menu';
 import Order from './Order';
-import './App.css';  // Import the CSS file
+import RestaurantDashboard from './RestaurantDashboard';
+import './App.css';
 
 function App() {
   const [backendData, setBackendData] = useState('');
+  const [userRole, setUserRole] = useState('');  // State to store user role
 
   useEffect(() => {
-    // Log to check when the useEffect is triggered
-    console.log("Fetching data from the backend...");
-
+    // Fetching data from the backend
     axios.get('http://localhost:5000/')
-      .then(response => {
-        console.log("Backend data received:", response.data);
-        setBackendData(response.data);  // Update state with the data
-      })
+      .then(response => setBackendData(response.data))
       .catch(error => console.error('Error fetching backend data:', error));
+
+    // Fetching the user's role using the stored token
+    const token = localStorage.getItem('token');  // Assuming token is stored in localStorage after login
+    if (token) {
+      axios.get('http://localhost:5000/api/auth/user', {
+        headers: { 'Authorization': `Bearer ${token}` }
+      })
+      .then(response => setUserRole(response.data.role))
+      .catch(error => console.error('Error fetching user role:', error));
+    }
   }, []);  // Empty dependency array ensures it runs only once on component mount
 
   return (
@@ -24,13 +31,27 @@ function App() {
       <h1>Restaurant Food Ordering App</h1>
       <p>{backendData}</p>
 
-      <div className="menu-container">
-        <Menu />
-      </div>
+      {/* Conditionally rendering components based on user role */}
+      {userRole === 'restaurant' && (
+        <div className="restaurant-dashboard">
+          <h2>Restaurant Dashboard</h2>
+          <RestaurantDashboard />
+        </div>
+      )}
 
-      <div className="order-container">
-        <Order />
-      </div>
+      {userRole === 'customer' && (
+        <div className="customer-dashboard">
+          <h2>Customer Menu</h2>
+          <Menu />
+          <Order />
+        </div>
+      )}
+
+      {!userRole && (
+        <div>
+          <h2>Loading...</h2>
+        </div>
+      )}
     </div>
   );
 }
