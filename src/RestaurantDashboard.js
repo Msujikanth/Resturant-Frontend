@@ -194,7 +194,7 @@ const RestaurantDashboard = () => {
               <h4>{item.name}</h4>
               <p>Price: ${item.price}</p>
               <p>Category: {item.category}</p>
-              {item.image && <img src={`http://localhost:5000/uploads/${item.image}`} alt={item.name} />}
+              {item.imageUrl && <img src={`http://localhost:5000${item.imageUrl}`} alt={item.name} />}
               <div className="button-group">
                 <button className="edit-btn" onClick={() => handleEditItem(item)}>Edit</button>
                 <button className="delete-btn" onClick={() => handleDeleteItem(item._id)}>Delete</button>
