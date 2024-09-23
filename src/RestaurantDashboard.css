@@ -151,6 +151,25 @@ form button:hover {
   background-color: #c0392b;
 }
 
+.tabs {
+  display: flex;
+  margin-bottom: 20px;
+}
+
+.tabs button {
+  padding: 10px 20px;
+  margin-right: 10px;
+  cursor: pointer;
+  background-color: #f1f1f1;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.active-tab {
+  background-color: #007bff;
+  color: rgb(195, 190, 255);
+}
+
 table {
   width: 100%;
   border-collapse: collapse;
@@ -168,4 +187,5 @@ th {
 td {
   text-align: center;
 }
+
 
